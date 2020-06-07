@@ -1,0 +1,25 @@
+[package]
+name = "bae_sounds"
+description = "Structures representing playable sounds, built into the Broad Audio Engine."
+repository = "https://github.com/ChylerDev/BAE_Sounds"
+license = "MIT"
+version = "0.14.0" # don't forget to fix version numbers in README.md documentation links
+authors = ["Chyler Morrison <contact@chyler.info>"]
+edition = "2018"
+keywords = [ "audio", "audio-processing" ]
+categories = [ "multimedia::audio" ]
+
+[badges]
+is-it-maintained-issue-resolution = { repository = "ChylerDev/BAE" }
+is-it-maintained-open-issues = { repository = "ChylerDev/BAE" }
+maintenance = { status = "actively-developed" }
+
+[dependencies]
+bae_gen = { git = "https://github.com/ChylerDev/BAE_Gen", branch = "dev" }
+bae_mod = { git = "https://github.com/ChylerDev/BAE_Mod", branch = "dev" }
+bae_types = { git = "https://github.com/ChylerDev/BAE_Types", branch = "master" }
+petgraph = "0.5"
+
+[dev-dependencies]
+bae_utils = { git = "https://github.com/ChylerDev/BAE_Utils", branch = "dev" }
+version-sync = "0.9"
