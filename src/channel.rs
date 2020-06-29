@@ -32,7 +32,7 @@ where
     fn get_output(&self) -> &Vec<SF>;
 
     /// Sets the gain of the output of the channel.
-    fn set_gain(&mut self, gain: MathT);
+    fn set_gain(&mut self, gain: Math);
 
     /// Processes the given number of samples, storing the results in the
     /// internal track of samples.

@@ -15,22 +15,22 @@ mod tests {
 
     #[test]
     fn test_blocks() {
-        let mut b = BaeBlock::from_generator(Sine::new(440.0, SAMPLE_RATE as MathT));
-        let mut s = Sine::new(440.0, SAMPLE_RATE as MathT);
+        let mut b = BaeBlock::from_generator(Sine::new(440.0, SAMPLE_RATE as Math));
+        let mut s = Sine::new(440.0, SAMPLE_RATE as Math);
 
         for _ in 0..seconds_to_samples(
             std::time::Duration::from_secs_f64(1.0 / 440.0),
-            SAMPLE_RATE as MathT,
+            SAMPLE_RATE as Math,
         ) {
             assert!((b.process() - s.process()).abs() < 1e-15);
         }
 
-        let mut b = BaeBlock::from_modifier(LowPass::new(440.0, 1.0, SAMPLE_RATE as MathT));
+        let mut b = BaeBlock::from_modifier(LowPass::new(440.0, 1.0, SAMPLE_RATE as Math));
         let mut n = Noise::new();
 
-        let mut t = SampleTrackT::new();
+        let mut t = SamplerackT::new();
 
-        for _ in 0..seconds_to_samples(Duration::from_secs_f64(0.5), SAMPLE_RATE as MathT) {
+        for _ in 0..seconds_to_samples(Duration::from_secs_f64(0.5), SAMPLE_RATE as Math) {
             b.prime_input(n.process());
             t.push(b.process());
         }
@@ -54,18 +54,18 @@ mod tests {
             Arc::new(BaeBlock::from_modifier(LowPass::new(
                 440.0,
                 1.0,
-                SAMPLE_RATE as MathT,
+                SAMPLE_RATE as Math,
             ))),
             Arc::new(BaeBlock::from_modifier(HighPass::new(
                 220.0,
                 1.0,
-                SAMPLE_RATE as MathT,
+                SAMPLE_RATE as Math,
             ))),
         ]);
 
-        let mut t = SampleTrackT::new();
+        let mut t = SamplerackT::new();
 
-        for _ in 0..seconds_to_samples(Duration::from_secs(4), SAMPLE_RATE as MathT) {
+        for _ in 0..seconds_to_samples(Duration::from_secs(4), SAMPLE_RATE as Math) {
             t.push(ss.process(0.0));
         }
 
@@ -85,12 +85,12 @@ mod tests {
         let lp = cs.add_block(Arc::new(BaeBlock::from_modifier(LowPass::new(
             440.0,
             1.0,
-            SAMPLE_RATE as MathT,
+            SAMPLE_RATE as Math,
         ))));
         let hp = cs.add_block(Arc::new(BaeBlock::from_modifier(HighPass::new(
             220.0,
             1.0,
-            SAMPLE_RATE as MathT,
+            SAMPLE_RATE as Math,
         ))));
 
         cs.add_connection(cs.get_input_gain(), n);
@@ -98,9 +98,9 @@ mod tests {
         cs.add_connection(lp, hp);
         cs.add_connection(hp, cs.get_output_gain());
 
-        let mut t = SampleTrackT::new();
+        let mut t = SamplerackT::new();
 
-        for _ in 0..seconds_to_samples(Duration::from_secs(4), SAMPLE_RATE as MathT) {
+        for _ in 0..seconds_to_samples(Duration::from_secs(4), SAMPLE_RATE as Math) {
             t.push(cs.process(0.0));
         }
 
@@ -113,15 +113,15 @@ mod tests {
     }
 
     fn normalize_write(
-        db: MathT,
-        mut t: SampleTrackT,
+        db: Math,
+        mut t: SamplerackT,
         d: &mut dyn std::io::Write,
     ) -> Result<(), ()> {
         normalize(db, &mut t);
 
         WaveWriteOptions::new()
             .bps(24)?
-            .r(SAMPLE_RATE as MathT)
+            .r(SAMPLE_RATE as Math)
             .clip(true)
             .write(vec![t], d)
             .expect("Failed to write wav file");

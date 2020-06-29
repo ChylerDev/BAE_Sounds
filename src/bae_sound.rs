@@ -21,8 +21,8 @@ use super::*;
 pub struct BaeSound {
     generator: BlockSP,
     modifier_list: Vec<BlockSP>,
-    input_gain: SampleT,
-    output_gain: SampleT,
+    input_gain: Sample,
+    output_gain: Sample,
     id: Option<usize>,
     is_muted: bool,
     is_paused: bool,
@@ -38,12 +38,12 @@ impl BaeSound {
     /// [`Modifier`]: ../../modifiers/trait.Modifier.html
     /// [`add_modifier`]: struct.BaeSound.html#method.add_modifier
     /// [`extend_modifiers`]: struct.BaeSound.html#method.extend_modifiers
-    pub fn new(input_gain: MathT, output_gain: MathT, generator: BlockSP) -> Self {
+    pub fn new(input_gain: Math, output_gain: Math, generator: BlockSP) -> Self {
         BaeSound {
             generator,
             modifier_list: Vec::new(),
-            input_gain: input_gain as SampleT,
-            output_gain: output_gain as SampleT,
+            input_gain: input_gain as Sample,
+            output_gain: output_gain as Sample,
             id: None,
             is_muted: false,
             is_paused: false,
@@ -70,23 +70,23 @@ impl BaeSound {
     }
 
     /// Returns the linear gain applied to the input during processing.
-    pub fn get_input_gain(&self) -> MathT {
-        self.input_gain as MathT
+    pub fn get_input_gain(&self) -> Math {
+        self.input_gain as Math
     }
 
     /// Returns the linear gain applied to the output during processing.
-    pub fn get_output_gain(&self) -> MathT {
-        self.output_gain as MathT
+    pub fn get_output_gain(&self) -> Math {
+        self.output_gain as Math
     }
 
     /// Sets the input linear gain that is applied during processing.
-    pub fn set_input_gain(&mut self, g: MathT) {
-        self.input_gain = g as SampleT;
+    pub fn set_input_gain(&mut self, g: Math) {
+        self.input_gain = g as Sample;
     }
 
     /// Sets the output linear gain that is applied during processing.
-    pub fn set_output_gain(&mut self, g: MathT) {
-        self.output_gain = g as SampleT;
+    pub fn set_output_gain(&mut self, g: Math) {
+        self.output_gain = g as Sample;
     }
 }
 
@@ -115,7 +115,7 @@ impl Sound for BaeSound {
         self.id = None;
     }
 
-    fn process(&mut self, input: SampleT) -> SampleT {
+    fn process(&mut self, input: Sample) -> Sample {
         if self.is_paused {
             return Default::default();
         }

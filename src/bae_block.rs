@@ -16,14 +16,14 @@ use std::sync::Arc;
 type GeneratorSP = Arc<dyn Generator>;
 type ModifierSP = Arc<dyn Modifier>;
 
-/// Type defining the closure that combines inputted SampleT samples from the
+/// Type defining the closure that combines inputted Sample samples from the
 /// outputs of the [`Generator`]s and [`Modifier`]s of the containing
 /// [`BaeBlock`].
 ///
 /// [`Generator`]: ../../generators/trait.Generator.html
 /// [`Modifier`]: ../../modifiers/trait.Modifier.html
 /// [`BaeBlock`]: struct.BaeBlock.html
-pub type InterBase = dyn FnMut(SampleT, SampleT) -> SampleT;
+pub type InterBase = dyn FnMut(Sample, Sample) -> Sample;
 
 /// Reference-counted wrapper for the closure [`InterBase`]
 ///
@@ -51,7 +51,7 @@ pub struct BaeBlock {
     g: GeneratorSP,
     m: ModifierSP,
     i: Inter,
-    input: SampleT,
+    input: Sample,
 }
 
 impl BaeBlock {
@@ -78,7 +78,7 @@ impl BaeBlock {
             g: Arc::new(g),
             m: Arc::new(m),
             i,
-            input: SampleT::default(),
+            input: Sample::default(),
         }
     }
 
@@ -102,7 +102,7 @@ impl BaeBlock {
             g: Arc::new(g),
             m: Arc::new(Passthrough::new()),
             i: Self::generator_passthrough(),
-            input: SampleT::default(),
+            input: Sample::default(),
         }
     }
 
@@ -126,7 +126,7 @@ impl BaeBlock {
             g: Arc::new(Zero::new()),
             m: Arc::new(m),
             i: Self::modifier_passthrough(),
-            input: SampleT::default(),
+            input: Sample::default(),
         }
     }
 
@@ -182,11 +182,11 @@ impl BaeBlock {
 }
 
 impl Block for BaeBlock {
-    fn prime_input(&mut self, x: SampleT) {
+    fn prime_input(&mut self, x: Sample) {
         self.input += x;
     }
 
-    fn process(&mut self) -> SampleT {
+    fn process(&mut self) -> Sample {
         let y = Inter::get_mut(&mut self.i).unwrap()(
             GeneratorSP::get_mut(&mut self.g).unwrap().process(),
             ModifierSP::get_mut(&mut self.m)
@@ -194,7 +194,7 @@ impl Block for BaeBlock {
                 .process(self.input),
         );
 
-        self.input = SampleT::default();
+        self.input = Sample::default();
 
         y
     }

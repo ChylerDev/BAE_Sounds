@@ -28,7 +28,7 @@ pub use complex_sound::*;
 /// [`Modifier`]: ../../modifiers/trait.Modifier.html
 pub trait Block {
     /// Increments the internal input sample by the given sample.
-    fn prime_input(&mut self, x: SampleT);
+    fn prime_input(&mut self, x: Sample);
 
     /// Process the [`Block`]. Individually processes the stored [`Generator`]
     /// and [`Modifier`] objects which are both combined using the [`Inter`] and
@@ -38,7 +38,7 @@ pub trait Block {
     /// [`Generator`]: ../../generators/trait.Generator.html
     /// [`Modifier`]: ../../modifiers/trait.Modifier.html
     /// [`Inter`]: type.Inter.html
-    fn process(&mut self) -> SampleT;
+    fn process(&mut self) -> Sample;
 }
 
 /// Alias for a [`Block`] object wrapped in a smart pointer.
@@ -83,7 +83,7 @@ pub trait Sound {
     /// [`Default::default()`] is still returned.
     ///
     /// [`Default::default()`]: https://doc.rust-lang.org/std/default/trait.Default.html#tymethod.default
-    fn process(&mut self, input: SampleT) -> SampleT;
+    fn process(&mut self, input: Sample) -> Sample;
 
     /// Sets itself as registered with the given ID.
     ///

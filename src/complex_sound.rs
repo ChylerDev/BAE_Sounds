@@ -52,13 +52,13 @@ impl ComplexSound {
     /// values.
     ///
     /// [`ComplexSound`]: struct.ComplexSound.html
-    pub fn new(input_gain: MathT, output_gain: MathT) -> Self {
+    pub fn new(input_gain: Math, output_gain: Math) -> Self {
         let mut graph = Graph::new();
         let input_gain = graph.add_node(Arc::new(BaeBlock::from_modifier(
-            Gain::new(input_gain as SampleT),
+            Gain::new(input_gain as Sample),
         )));
         let output_gain = graph.add_node(Arc::new(BaeBlock::from_modifier(
-            Gain::new(output_gain as SampleT),
+            Gain::new(output_gain as Sample),
         )));
 
         ComplexSound {
@@ -199,7 +199,7 @@ impl Sound for ComplexSound {
         self.id = None;
     }
 
-    fn process(&mut self, input: SampleT) -> SampleT {
+    fn process(&mut self, input: Sample) -> Sample {
         if self.is_paused {
             return Default::default();
         }

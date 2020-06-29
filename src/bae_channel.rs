@@ -14,10 +14,10 @@ pub struct BaeChannel<SF>
 where
     SF: SampleFormat,
 {
-    sample_rate: MathT,
+    sample_rate: Math,
     output: Vec<SF>,
     sounds: HashMap<usize, SoundSP>,
-    gain: SampleT,
+    gain: Sample,
     id_counter: usize,
 }
 
@@ -31,12 +31,12 @@ where
     /// [`set_process_time`] to change this.
     ///
     /// [`set_process_time`]: ../trait.Channel.html#tymethod.set_process_time
-    pub fn new(gain: MathT, sample_rate: MathT) -> Self {
+    pub fn new(gain: Math, sample_rate: Math) -> Self {
         BaeChannel {
             sample_rate,
-            output: Vec::with_capacity((0.01 * sample_rate as MathT) as usize),
+            output: Vec::with_capacity((0.01 * sample_rate as Math) as usize),
             sounds: HashMap::new(),
-            gain: gain as SampleT,
+            gain: gain as Sample,
             id_counter: 0,
         }
     }
@@ -55,15 +55,15 @@ where
     SF: SampleFormat,
 {
     fn set_process_time(&mut self, d: Duration) {
-        self.output = Vec::with_capacity((d.as_secs_f64() * self.sample_rate as MathT) as usize);
+        self.output = Vec::with_capacity((d.as_secs_f64() * self.sample_rate as Math) as usize);
     }
 
     fn get_output(&self) -> &Vec<SF> {
         &self.output
     }
 
-    fn set_gain(&mut self, gain: MathT) {
-        self.gain = gain as SampleT;
+    fn set_gain(&mut self, gain: Math) {
+        self.gain = gain as Sample;
     }
 
     fn process(&mut self) {
